@@ -8,12 +8,12 @@
 
 	</style> 
 
-	<div class="search-wrapper">
-
+	
 		<form action="{{ url("actor-search") }}">
-			<input type="search" name="q" placeholder="Search">
-			<input type="submit" value="Go">
+			<div class="container-input">
+				<input class="search" name="q" placeholder="Search">
+				<input class="button" type="submit" value="Search">
+			</div>
 		</form>
-
-	</div>
+	
 {% endblock %}

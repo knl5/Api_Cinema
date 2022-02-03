@@ -2,15 +2,15 @@
 
 {% block body %}
 
-<a class="btn btn-danger my-4" href="{{ url("form") }}">Retour</a>
+<a href="{{ url("form") }}">Retour</a>
 
-<div class="container mb-5">
-    <div class="card" style="width: 36rem;">
-        <img class="card-img-top" src="{{poster_url}}{{movie.poster_path}}" alt="Card image cap">
-        <div class="card-body">
-          <h5 class="card-title">{{movie.title}}</h5>
-          <p class="card-text">{{movie.release_date}}</p>
-          <p class="card-text">{{movie.overview}}</p>
+<div>
+    <div style="width: 36rem;">
+        <img src="{{poster_url}}{{movie.poster_path}}" alt="Card image cap">
+        <div>
+          <h5>{{movie.title}}</h5>
+          <p>{{movie.release_date}}</p>
+          <p>{{movie.overview}}</p>
         </div>
     </div>
 </div>

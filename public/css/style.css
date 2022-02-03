@@ -1,3 +1,97 @@
-body{
+body {
     background-color: rgb(37, 37, 37);
+    font-family: 'Open Sans', sans-serif;
+}
+
+header {
+    width: 100vw;
+    text-align: center;
+}
+
+h1 {
+    color: #fae3b9;
+    font-size: 35px;
+}
+
+a {
+    text-decoration: none;
+    color: #fae3b9;
+    font-size: 16px;
+    width: fit-content;
+    display: inline-block;
+    margin: 0 20px;
+}
+
+a::after {
+    content: '';
+    height: 1px;
+    display: block;
+    margin-top: 3px;
+    width: 100%;
+    background-color: #fae3b9;
+}
+
+.search {
+    border: none;
+    height: 40px;
+    width: 35%;
+    border-radius: 25px;
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+.button {
+    height: 40px;
+    border: none;
+    padding: 5px;
+    width: 70px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    margin-left: 10px;
+}
+
+.container-input {
+    margin-top: 250px;
+    display: flex;
+    justify-content: center;
+}
+
+main {
+    height: 100vh;
+
+    
+}
+.background{
+    background-image: url('https://images.pexels.com/photos/3767825/pexels-photo-3767825.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260');
+    filter: grayscale(100%);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain ;
+    height: 100vh;
+    position: absolute;
+    top: 140px;
+    left: 0;
+    right: 0;
+    z-index: -1;
+}
+
+.movies-container{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    
+}
+.movie-container{
+    margin: 10px;
+    background-color: #fae3b9;
+    border-radius: 10px;
+}
+.movie-container img{
+    height: 500px;
+    width: 100%;
+    object-fit: cover;
+    padding: 20px;
+    box-sizing: border-box;
+}
+.movie-info{
+    padding: 15px;
 }

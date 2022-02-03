@@ -4,18 +4,14 @@
 {% endblock %}
 
 {% block body %}
-	<style>
 
-	</style>
 
-	<div class="search-wrapper mt-5">
-
+	<div>
 		<form action="{{ url("search") }}">
-			<div class="d-flex">
-				<input class="form-control" type="search" name="q" placeholder="Search">
-				<input class="ms-4 btn btn-primary" type="submit" value="Go">
+			<div class="container-input">
+				<input class="search" type="search" name="q" placeholder="Search">
+				<input class="button" type="submit" value="Search">
 			</div>
 		</form>
-
 	</div>
 {% endblock %}
