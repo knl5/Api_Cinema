@@ -9,6 +9,7 @@
     <div class="movie-container">
         <div class="movie-image">
                 <img src="{{poster_url}}{{movie.poster_path}}" alt="Card image cap">
+                <a href="{{ url("addToList", {id: movie.id})}}" class="btn-list"> ❤️ </a> 
                 <div class="movie-info">
                         <h3>{{movie.title}}</h3>
                         <p>{{movie.release_date}}</p>

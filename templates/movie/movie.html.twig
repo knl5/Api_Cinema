@@ -4,10 +4,11 @@
 
 <a href="{{ url("form") }}">Retour</a>
 
-<div>
-    <div style="width: 36rem;">
-        <img src="{{poster_url}}{{movie.poster_path}}" alt="Card image cap">
-        <div>
+<div class="movie">
+    <div >
+        <img src="{{poster_url}}{{movie.poster_path}}" alt="image movie">
+        
+        <div class="movie-page">
           <h5>{{movie.title}}</h5>
           <p>{{movie.release_date}}</p>
           <p>{{movie.overview}}</p>

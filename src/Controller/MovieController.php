@@ -2,45 +2,44 @@
 
 namespace App\Controller;
 
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Doctrine\Persistence\ManagerRegistry;
+
+use App\TheMovieDB\TheMovieDbClient;
+
+use App\Entity\Movie;
+
 
 
 class MovieController extends AbstractController
 {
 
-    private $client;
-    public function __construct(HttpClientInterface $client)
-    {
-        $this->client = $client;
-    }
-
-    private $API_URL = "https://api.themoviedb.org/3";
-    private $SLUG = "/search/movie";
-    private $API_KEY = '5ebe0843b2e373ffa159f5683b21b7de';
-
     /**
      * @Route("/movie", name="form")
      * @Route("/", name="home")
      */
-    public function index(): Response
+    public function index(ManagerRegistry $doctrine): Response
     {
+
+        $wishlist = $doctrine->getRepository(Movie::class)->findAll();
+
         return $this->render('movie/index.html.twig', [
             'controller_name' => 'MovieController',
+            'wishlsit'  => $wishlist
         ]);
     }
 
     /**
      * @Route("/movie/search", name="search")
      */
-    public function findMovies(RequestStack $requestStack): Response
+    public function findMovies(RequestStack $requestStack, TheMovieDbClient $client): Response
     {
         $rq = $requestStack->getMainRequest();
-        $movies = $this->fetchApi('GET', '/search/movie', 'query='.$rq->query->get('q'))['results'];
-        // dd($movies);
+        $movies = $client->fetchApi('GET', '/search/movie', 'query='.$rq->query->get('q'))['results'];
         return $this->render('movie/movieList.html.twig', [
             'controller_name' => 'MovieController',
             'movies' => $movies,
@@ -49,27 +48,48 @@ class MovieController extends AbstractController
     }
 
     /**
-     * @Route("/movie/{id}", name="movie")
+     * @Route("/movie/{id}", name="movie", methods={"GET"})
      */
-    public function findOneMovie(RequestStack $requestStack): Response
+    public function findOneMovie(RequestStack $requestStack, TheMovieDbClient $client, ManagerRegistry $doctrine): Response
     {
         $rq = $requestStack->getMainRequest();
-        $movie = $this->fetchApi('GET', '/movie/'.$rq->attributes->get('id'));
+        $movie = $client->fetchApi('GET', '/movie/'.$rq->attributes->get('id'));
+        $isSave = $doctrine->getRepository(Movie::class)->findOneByMovieId($rq->attributes->get('id'));
+        $isSave = $isSave === null ? false : true;
+
+        $actors = $client->fetchApi('GET', '/movie/'.$rq->attributes->get('id').'/credits');
         return $this->render('movie/movie.html.twig', [
             'controller_name' => 'MovieController',
             'movie' => $movie,
+            'actors' => $actors['cast'],
+            'isSave' => $isSave,
             'poster_url' => "https://www.themoviedb.org/t/p/w1280"
         ]);
     }
 
-    private function fetchApi($method = 'GET', $action, $params = ''){
-        $response = $this->client->request($method, $this->API_URL . $action . '?api_key=' . $this->API_KEY . '&' . $params);
+    /**
+     * @Route("/movie/{id}", name="addToList", methods={"POST"})
+     */
+    public function addMovieToWatchList(RequestStack $requestStack, ManagerRegistry $doctrine) : Response
+    {
 
-        $statusCode = $response->getStatusCode();
-        $contentType = $response->getHeaders()['content-type'][0];
-        $content = $response->getContent();
-        $content = $response->toArray();
+        $entityManager = $doctrine->getManager();
+        $rq = $requestStack->getMainRequest();
 
-        return $content;
+        $movie = new Movie();
+        $movie->setMovieId($rq->attributes->get('id'));
+        $movie->setName($rq->get('title'));
+        $movie->setAddDate(new \DateTime());
+
+        $entityManager->persist($movie);
+        $entityManager->flush();
+
+        // return new Response("Add movie to wishlist");
+        return $this->redirectToRoute('movie', ['id' => $rq->attributes->get('id')]);
     }
+
+     /**
+     * @Route("/movie/dump", name="dumpDb")
+     */
+
 }

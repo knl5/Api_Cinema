@@ -86,7 +86,7 @@ main {
     border-radius: 10px;
 }
 .movie-container img{
-    height: 500px;
+    height: 1000px;
     width: 100%;
     object-fit: cover;
     padding: 20px;
@@ -94,4 +94,24 @@ main {
 }
 .movie-info{
     padding: 15px;
+}
+.movie-page{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    background-color: azure;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 20px;
+}
+img{
+    width: 350px;
+    height: auto;
+}
+.movie{
+    background-image: none;
+}
+.btn-add{
+    width: 20px;
 }
