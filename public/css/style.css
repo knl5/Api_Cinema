@@ -105,6 +105,10 @@ main {
     padding: 15px;
     margin: 20px;
 }
+.movie-container a{
+    color: black;
+}
+
 img{
     width: 350px;
     height: auto;

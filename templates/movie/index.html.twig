@@ -7,11 +7,39 @@
 
 
 	<div>
+
+	<h2>Movie: </h2>
 		<form action="{{ url("search") }}">
 			<div class="container-input">
 				<input class="search" type="search" name="q" placeholder="Search">
 				<input class="button" type="submit" value="Search">
 			</div>
 		</form>
+
+		<hr>
+
+		<div>
+		<h2>Wish list :</h2>
+		<a href="{{ url("dumpDb")}}" class="btn">Delete All</a>
+	
+	</div>
+
+		<div>
+			{% for movie in wishlist %}
+				<div>
+					<div>
+							<div>
+									<h5>{{movie.name}}</h5>
+									<p>Added to list on : {{movie.getAddDate | date('l j M Y')}}</p>
+									
+							</div>
+							<div>
+									<a href="{{ url("movie", {id: movie.movieId})}}" class="btn">See film card</a>
+									<a href="{{ url("removeToList", {id: movie.movieId})}}" class="btn">Delete Movie</a>
+							</div>
+					</div>
+				</div>       
+			{% endfor %}
+		</div>
 	</div>
 {% endblock %}

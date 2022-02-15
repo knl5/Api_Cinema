@@ -1,11 +1,17 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Movie - {{movie.title}}{% endblock %}
+
 {% block body %}
 
 <a href="{{ url("form") }}">Retour</a>
 
 <div class="movie">
     <div >
+    <form action="{% if(isSave) %} {{ url("removeToList", {id: movie.id}) }} {% else %} {{app.request.uri}} {% endif %}" method="POST">
+    <input type="text" name="title" value="{{movie.title}}" hidden>
+            <input type="submit" value="&#x2661;" class="btn {% if isSave  %}btn{% endif %}" >
+          </form>
         <img src="{{poster_url}}{{movie.poster_path}}" alt="image movie">
         
         <div class="movie-page">
@@ -15,6 +21,22 @@
         </div>
     </div>
 </div>
+<div class="col-6 p-0">
+        <h2>Actors :</h2>
+        <div class="row">
+          {% for actor in actors  %}
+            <div >
+              <div>
+                <img src="{{poster_url}}{{actor.profile_path}}" alt="Card image cap">
+                <div>
+                  <h5>{{actor.name}}</h5>
+                  <p>{{actor.character}}</p>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
 
 
 

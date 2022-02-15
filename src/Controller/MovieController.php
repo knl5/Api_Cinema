@@ -26,10 +26,9 @@ class MovieController extends AbstractController
     {
 
         $wishlist = $doctrine->getRepository(Movie::class)->findAll();
-
         return $this->render('movie/index.html.twig', [
             'controller_name' => 'MovieController',
-            'wishlsit'  => $wishlist
+            'wishlist'  => $wishlist
         ]);
     }
 
@@ -72,7 +71,6 @@ class MovieController extends AbstractController
      */
     public function addMovieToWatchList(RequestStack $requestStack, ManagerRegistry $doctrine) : Response
     {
-
         $entityManager = $doctrine->getManager();
         $rq = $requestStack->getMainRequest();
 
@@ -84,12 +82,38 @@ class MovieController extends AbstractController
         $entityManager->persist($movie);
         $entityManager->flush();
 
-        // return new Response("Add movie to wishlist");
-        return $this->redirectToRoute('movie', ['id' => $rq->attributes->get('id')]);
+        $referer = $requestStack->getMainRequest()->headers->get('referer');   
+        return $this->redirect($referer);
     }
 
-     /**
-     * @Route("/movie/dump", name="dumpDb")
+    /**
+     * @Route("/movie/delete/{id}", name="removeToList")
      */
+    public function removeMovieToWatchList(RequestStack $requestStack, ManagerRegistry $doctrine) : Response
+    {
+        $rq = $requestStack->getMainRequest();
+        $entityManager = $doctrine->getManager();
+
+        $movie = $doctrine->getRepository(Movie::class)->findOneByMovieId($rq->attributes->get('id'));
+        $entityManager->remove($movie);
+        $entityManager->flush();
+
+        $referer = $requestStack->getMainRequest()->headers->get('referer');   
+        return $this->redirect($referer);
+    }   
+
+    /**
+     * @Route("/dump/movies", name="dumpDb")
+     */
+    public function dumpDb(ManagerRegistry $doctrine) : Response
+    {
+        $entityManager = $doctrine->getManager();
+        $movies = $doctrine->getRepository(Movie::class)->findAll();
+        foreach ($movies as $id => $movie) {
+            $entityManager->remove($movie);
+        }
+        $entityManager->flush();
+        return $this->redirectToRoute('form');
+    }
 
 }
